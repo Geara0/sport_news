@@ -61,10 +61,10 @@ packages:
     dependency: "direct main"
     description:
       name: easy_localization
-      sha256: "6693b12ffadb5f990e46aba5f93b0d97fb1ccd4da6b7e95d01c0789be78a9dc2"
+      sha256: "30ebf25448ffe169e0bd9bc4b5da94faa8398967a2ad2ca09f438be8b6953645"
       url: "https://pub.dev"
     source: hosted
-    version: "3.0.2-dev.6+0"
+    version: "3.0.2"
   easy_logger:
     dependency: transitive
     description:
@@ -102,6 +102,14 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  flutter_animate:
+    dependency: "direct main"
+    description:
+      name: flutter_animate
+      sha256: f611a67082d4c5ff9b8b7737ec7e675a22af70a94c8c3c22109f14b078d4d2bf
+      url: "https://pub.dev"
+    source: hosted
+    version: "4.1.1+1"
   flutter_lints:
     dependency: "direct dev"
     description:

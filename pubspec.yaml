@@ -10,6 +10,7 @@ dependencies:
   flutter:
     sdk: flutter
   easy_localization: ^3.0.0
+  flutter_animate: ^4.0.0
 
   cupertino_icons: ^1.0.2
 
@@ -23,4 +24,5 @@ flutter:
   generate: true
   assets:
     - assets/translations/
+    - assets/images/
   uses-material-design: true
