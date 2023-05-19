@@ -5,5 +5,9 @@
     "showMore": "Show more",
     "header": "This is post header",
     "defaultCount": "10"
+  },
+  "errors": {
+    "noInternet": "No internet connection, please enter the web and try again",
+    "invalidUrl": "Invalid url, please contact us at example@email.com"
   }
 }

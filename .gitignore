@@ -55,3 +55,5 @@ firebase-debug.log
 # Google Services (ex. APIs and Firebase)
 google-services.json
 GoogleService-Info.plist
+/lib/utils/firebase_remote_config_service/firebase_remote_config_service.g.dart
+/lib/firebase_options.dart

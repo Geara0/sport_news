@@ -32,25 +32,22 @@ class _PostWidgetState extends State<PostWidget> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           if (widget.imageProvider != null)
-            LayoutBuilder(
-              builder: (BuildContext context, BoxConstraints constraints) {
-                return Image(
-                  image: widget.imageProvider!,
-                  fit: BoxFit.cover,
-                  height: constraints.maxWidth,
-                ).animate().fadeIn(duration: 150.ms);
-              },
+            Image(
+              image: widget.imageProvider!,
+              fit: BoxFit.cover,
             ),
           Padding(
             padding: const EdgeInsets.all(8),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  widget.header,
-                  style: const TextStyle(
-                    fontWeight: FontWeight.w700,
-                    fontSize: 20,
+                SelectionArea(
+                  child: Text(
+                    widget.header,
+                    style: const TextStyle(
+                      fontWeight: FontWeight.w700,
+                      fontSize: 20,
+                    ),
                   ),
                 ),
                 AnimatedCrossFade(
@@ -60,8 +57,13 @@ class _PostWidgetState extends State<PostWidget> {
                       : CrossFadeState.showFirst,
                   firstCurve: Curves.easeIn,
                   secondCurve: Curves.easeOut,
-                  firstChild: Text(widget.text, maxLines: 4),
-                  secondChild: Text(widget.text),
+                  firstChild: SelectionArea(
+                    child: Text(
+                      widget.text,
+                      maxLines: 4,
+                    ),
+                  ),
+                  secondChild: SelectionArea(child: Text(widget.text)),
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
