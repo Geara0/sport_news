@@ -21,7 +21,7 @@ dependencies:
 
   flutter_riverpod: ^2.1.1
   riverpod_annotation: ^1.0.6
-  webview_flutter: ^4.2.0
+  flutter_inappwebview: ^5.7.2
   device_info_plus: ^9.0.1
   shared_preferences: ^2.1.1
   connectivity_plus: ^4.0.1
