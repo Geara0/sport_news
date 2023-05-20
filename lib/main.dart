@@ -5,6 +5,7 @@ import 'package:firebase_remote_config/firebase_remote_config.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:sport_news/global_variables.dart';
 import 'package:sport_news/pages/internet_error/internet_error_page.dart';
 import 'package:sport_news/pages/placeholder/placeholder_page.dart';
 import 'package:sport_news/pages/web_view/web_view_page.dart';
@@ -25,7 +26,7 @@ void main() async {
   final hasConnection = connection != ConnectivityResult.none;
   final isEmu = await checkIsEmu();
   final prefs = await SharedPreferences.getInstance();
-  final link = prefs.getString('link');
+  final link = prefs.getString(GlobalVariables.localLinkName);
   app = await _getApp(
       hasInternet: hasConnection, isPlaceholder: isEmu, link: link);
 
@@ -65,6 +66,8 @@ Future<Widget> _getApp({
   if (link != null && link.isNotEmpty) {
     var uri = Uri.tryParse(link);
     if (uri != null && uri.hasScheme) {
+      SharedPreferences.getInstance().then(
+          (prefs) => prefs.setString(GlobalVariables.localLinkName, link));
       return WebViewPage(uri: uri);
     }
   }

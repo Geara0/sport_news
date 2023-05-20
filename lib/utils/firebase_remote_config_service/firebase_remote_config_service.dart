@@ -3,6 +3,7 @@ import 'dart:developer' as developer;
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_remote_config/firebase_remote_config.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:sport_news/global_variables.dart';
 
 part 'firebase_remote_config_service.g.dart';
 
@@ -37,5 +38,6 @@ class FirebaseRemoteConfigService {
     }
   }
 
-  String get link => firebaseRemoteConfig.getString('link');
+  String get link =>
+      firebaseRemoteConfig.getString(GlobalVariables.remoteLinkName);
 }
