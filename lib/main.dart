@@ -13,12 +13,10 @@ import 'package:sport_news/utils/emulator_utils/emulator_checkup.dart';
 import 'package:sport_news/utils/firebase_remote_config_service/firebase_remote_config_service.dart';
 import 'package:sport_news/utils/material_wrap/material_wrap.dart';
 
-import 'firebase_options.dart';
-
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await EasyLocalization.ensureInitialized();
-  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  await Firebase.initializeApp();
 
   late final Widget app;
 
