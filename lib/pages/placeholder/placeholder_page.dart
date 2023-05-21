@@ -1,5 +1,6 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:sport_news/global_variables.dart';
 import 'package:sport_news/widgets/post_widget.dart';
 
 class PlaceHolderPage extends StatefulWidget {
@@ -12,6 +13,7 @@ class PlaceHolderPage extends StatefulWidget {
 class _PlaceHolderPageState extends State<PlaceHolderPage> {
   @override
   Widget build(BuildContext context) {
+    var news = GlobalVariables.news;
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
@@ -23,11 +25,13 @@ class _PlaceHolderPageState extends State<PlaceHolderPage> {
           itemBuilder: (BuildContext context, int i) => Padding(
             padding: const EdgeInsets.symmetric(horizontal: 2),
             child: PostWidget(
-              text: 'lorem'.tr(),
-              header: 'post.header'.tr(),
-              imageProvider: const AssetImage('assets/images/icon.jpg'),
+              date: news[i].date,
+              text: news[i].text,
+              header: news[i].header,
+              imageProvider: AssetImage(news[i].imagePath),
             ),
           ),
+          itemCount: news.length,
         ),
       ),
     );

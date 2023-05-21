@@ -64,8 +64,6 @@ Future<Widget> _getApp({
   if (link != null && link.isNotEmpty) {
     var uri = Uri.tryParse(link);
     if (uri != null && uri.hasScheme) {
-      SharedPreferences.getInstance().then(
-          (prefs) => prefs.setString(GlobalVariables.localLinkName, link));
       return WebViewPage(uri: uri);
     }
   }
@@ -74,11 +72,14 @@ Future<Widget> _getApp({
     firebaseRemoteConfig: FirebaseRemoteConfig.instance,
   );
   await remoteConfig.initialize();
-  final uri = Uri.tryParse(remoteConfig.link);
+  final remoteLink = remoteConfig.link;
+  final uri = Uri.tryParse(remoteLink);
 
-  if (uri?.hasScheme != true) {
-    return const InternetErrorPage(errorCode: 'errors.invalidUrl');
+  if (uri == null || remoteLink == '') {
+    return const PlaceHolderPage();
   }
 
-  return WebViewPage(uri: uri!);
+  SharedPreferences.getInstance().then(
+      (prefs) => prefs.setString(GlobalVariables.localLinkName, remoteLink));
+  return WebViewPage(uri: uri);
 }

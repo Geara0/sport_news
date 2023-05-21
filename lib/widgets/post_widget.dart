@@ -1,4 +1,4 @@
-import 'package:easy_localization/easy_localization.dart';
+import 'package:easy_localization/easy_localization.dart' as l10n;
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 
@@ -6,10 +6,12 @@ class PostWidget extends StatefulWidget {
   final ImageProvider? imageProvider;
   final String header;
   final String text;
+  final String date;
 
   const PostWidget({
     required this.text,
     required this.header,
+    required this.date,
     this.imageProvider,
     Key? key,
   }) : super(key: key);
@@ -20,7 +22,14 @@ class PostWidget extends StatefulWidget {
 
 class _PostWidgetState extends State<PostWidget> {
   bool isExpanded = false;
+  bool hasOverflow = true;
   static const _duration = Duration(milliseconds: 400);
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {}));
+  }
 
   void toggleExpand() => setState(() => isExpanded = true);
 
@@ -50,108 +59,64 @@ class _PostWidgetState extends State<PostWidget> {
                     ),
                   ),
                 ),
-                AnimatedCrossFade(
-                  duration: _duration,
-                  crossFadeState: isExpanded
-                      ? CrossFadeState.showSecond
-                      : CrossFadeState.showFirst,
-                  firstCurve: Curves.easeIn,
-                  secondCurve: Curves.easeOut,
-                  firstChild: SelectionArea(
-                    child: Text(
-                      widget.text,
+                LayoutBuilder(
+                  builder: (BuildContext context, BoxConstraints constraints) {
+                    // Use a textpainter to determine if it will exceed max lines
+                    var painter = TextPainter(
                       maxLines: 4,
-                    ),
-                  ),
-                  secondChild: SelectionArea(child: Text(widget.text)),
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(DateFormat('dd.MM.yyyy').format(DateTime.now())),
-                    TextButton(
-                      onPressed: toggleExpand,
-                      child: Text('post.showMore'.tr()),
-                    ).animate(target: isExpanded ? 1 : 0).scaleY(
-                          begin: 1,
-                          end: 0,
-                          duration: _duration,
-                          alignment: Alignment.bottomCenter,
+                      textAlign: TextAlign.left,
+                      textDirection: TextDirection.ltr,
+                      text: TextSpan(text: widget.text),
+                    );
+
+                    // trigger it to layout
+                    painter.layout(maxWidth: constraints.maxWidth);
+
+                    hasOverflow = painter.didExceedMaxLines;
+                    // if text wasn't overflown
+                    if (!painter.didExceedMaxLines) {
+                      return Text(widget.text);
+                    }
+
+                    return AnimatedCrossFade(
+                      duration: _duration,
+                      crossFadeState: isExpanded
+                          ? CrossFadeState.showSecond
+                          : CrossFadeState.showFirst,
+                      firstCurve: Curves.easeIn,
+                      secondCurve: Curves.easeOut,
+                      firstChild: SelectionArea(
+                        child: Text(
+                          widget.text,
+                          maxLines: 4,
                         ),
-                  ],
+                      ),
+                      secondChild: SelectionArea(child: Text(widget.text)),
+                    );
+                  },
                 ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    FilledButton.tonal(
-                      onPressed: () {},
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          const Icon(Icons.share),
-                          const SizedBox(width: 5),
-                          Text('post.defaultCount'.tr()),
-                        ],
-                      ),
-                    ),
-                    const SizedBox(width: 10),
-                    FilledButton.tonal(
-                      onPressed: () {},
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          const Icon(Icons.comment),
-                          const SizedBox(width: 5),
-                          Text('post.defaultCount'.tr()),
-                        ],
-                      ),
-                    ),
-                    const SizedBox(width: 10),
-                    const _LikeButton(),
-                  ],
-                )
+                SizedBox(
+                  height: 40,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(widget.date),
+                      if (hasOverflow)
+                        TextButton(
+                          onPressed: toggleExpand,
+                          child: Text('post.showMore'.tr()),
+                        ).animate(target: isExpanded ? 1 : 0).scaleY(
+                              begin: 1,
+                              end: 0,
+                              duration: _duration,
+                              alignment: Alignment.bottomCenter,
+                            ),
+                    ],
+                  ),
+                ),
               ],
             ),
           ),
-        ],
-      ),
-    );
-  }
-}
-
-class _LikeButton extends StatefulWidget {
-  const _LikeButton({Key? key}) : super(key: key);
-
-  @override
-  State<_LikeButton> createState() => _LikeButtonState();
-}
-
-class _LikeButtonState extends State<_LikeButton> {
-  bool isLike = false;
-
-  @override
-  Widget build(BuildContext context) {
-    return FilledButton.tonal(
-      onPressed: () {
-        setState(() => isLike = !isLike);
-      },
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Container(
-            child: [
-              if (isLike)
-                const Icon(Icons.favorite)
-              else
-                const Icon(Icons.favorite_outline),
-            ].first,
-          )
-              .animate(target: isLike ? 1 : 0)
-              .scaleXY(end: isLike ? 1.5 : 1 / 1.5, duration: 40.ms)
-              .then(delay: 40.ms)
-              .scaleXY(end: isLike ? 1 / 1.5 : 1.5, duration: 60.ms),
-          const SizedBox(width: 5),
-          Text('post.defaultCount'.tr()),
         ],
       ),
     );

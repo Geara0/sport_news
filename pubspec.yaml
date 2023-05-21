@@ -40,5 +40,6 @@ flutter:
   assets:
     - assets/translations/
     - assets/images/
+    - assets/images/news/
     - assets/icon/
   uses-material-design: true
